@@ -1,0 +1,11 @@
+[Unit]
+Description=PiFace Digital Web API
+After=network.target
+
+[Service]
+User=pi
+ExecStart=waitress-serve --port=8080 --call "pifacedigital_web_api:create_app"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
