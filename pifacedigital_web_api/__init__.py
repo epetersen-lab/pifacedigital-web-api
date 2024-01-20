@@ -9,11 +9,11 @@ def create_app():
 
     app = Flask(__name__, instance_relative_config=True)
     api = Api(app)
-    api.add_resource(PiFaceOutputs, "/outputs", methods=["GET"])
-    api.add_resource(PiFaceOutput, "/output/<int:output_pin>", methods=["GET"])
-    api.add_resource(PiFaceOutputSet, "/output/<int:output_pin>/<string:state>", methods=["PUT"])
-    api.add_resource(PiFaceInput, "/input/<int:input_pin>", methods=["GET"])
-    api.add_resource(PiFaceInputs, "/inputs", methods=["GET"])
+    api.add_resource(PiFaceOutputs, "/api/outputs", methods=["GET"])
+    api.add_resource(PiFaceOutput, "/api/output/<int:output_pin>", methods=["GET"])
+    api.add_resource(PiFaceOutputSet, "/api/output/<int:output_pin>/<string:state>", methods=["PUT"])
+    api.add_resource(PiFaceInput, "/api/input/<int:input_pin>", methods=["GET"])
+    api.add_resource(PiFaceInputs, "/api/inputs", methods=["GET"])
     return app
 
 
