@@ -53,7 +53,7 @@ $(VENV_PYTHON):
 venv: $(VENV_PYTHON)
 
 debug: venv
-	$(VENV)/bin/flask --app $(MOD_NAME)/__init__.py --debug run --host=0.0.0.0
+	$(VENV)/bin/flask --app $(MOD_NAME)/__init__.py --debug run --host=0.0.0.0 --port=8080
 
 systemd-install:
 	sudo cp systemd/$(PKG_NAME).service /etc/systemd/system
