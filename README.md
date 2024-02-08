@@ -1,10 +1,18 @@
 # PiFaceDigital-Web-API
 
-## Description
-Web API for interacting with the PiFaceDigital expansion board on Raspberry Pi,
+Web API for interacting with the PiFaceDigital expansion board on Raspberry Pi,  
 written in Python using Flask and Flask-RESTful.  
 
-The default port for accessing the API is TCP/8080.
+## Table of content
+1. [Installation](#installation)
+2. [Configuration](#configuration)
+3. [API Documentation](#api-documentation)
+   1. [Input pins](#input-pins)
+   2. [Output pins](#output-pins)
+4. [Home Assistant integration](#home-assistant-integration)
+   1. [Integrate input pins](#integrate-input-pins)
+   2. [Integrate output pins](#integrate-output-pins)
+5. [References](#references)
 
 ## Installation
 ```sh
@@ -20,12 +28,18 @@ sudo make systemd-install
 sudo make systemd-remove
 ```
 
+## Configuration
+The default port for accessing the API is TCP/8080.
+The port can be changed in the systemd service file located  
+at `/etc/systemd/system/pifacedigital-web-api.service` 
+
+
 ## API Documentation
 A RESTful API is provided for interacting with IO-pins of the PiFaceDigital.  
 The state of the input can be read. Output pins can be switched on and off.
 
 
-### INPUTS
+### Input pins
 
 Endpoints for retrieving the state of the input pins.
 
@@ -47,7 +61,7 @@ Endpoints for retrieving the state of the input pins.
 * 200 - Success
 * 400 - Invalid pin parameter
 
-### OUTPUTS
+### Output pins
 Endpoints for getting and setting the state of the output pins.
 
 #### Get state of all output pins
@@ -79,3 +93,73 @@ Endpoints for getting and setting the state of the output pins.
 **Status code** :  
 * 200 - Success
 * 400 - Invalid pin or state parameter
+
+
+## Home Assistant integration
+The project can integrate to [Home Assistant](https://www.home-assistant.io),
+so it is possible to use the state information and control the outputs in your automations.  
+
+
+#### Integrate input pins
+The state of an input pin can be retrieved by Home Assistant via the  
+RESTful binary sensor. Input pin0 and pin1 can be monitored by entering the following to your  
+`configuration.yaml`.  The example below will make a request to the API every 10 seconds,    
+so to be sure of detecting a state change, it has to remain in that state at least  
+this amount of time. This makes it unfit for certain use cases where the state changes  
+only briefly, like the behaviour of a push button.
+
+```
+# Input pin0
+binary_sensor:
+  - platform: rest
+    name: pifacedigital_input_0
+    unique_id: pifacedigital_input_0
+    resource: http://<HOST>:8080/api/input/0
+    scan_interval: 10
+
+# Input pin1
+binary_sensor:
+  - platform: rest
+    name: pifacedigital_input_1
+    unique_id: pifacedigital_input_1
+    resource: http://<HOST>:8080/api/input/1
+    scan_interval: 10
+```
+
+#### Integrate output pins
+The state of output pins can be controlled and retrieved by Home Assistant  
+via the RESTful Switch integration.  
+This example shows how to add output pin0 and pin1 to your `configuration.yaml` 
+
+```
+# Output pin1
+switch:
+  - platform: rest
+    name: pifacedigital_output_0
+    unique_id: pifacedigital_output_0
+    resource: http://<HOST>:8080/api/output/0
+    is_on_template: "{{ value |int == 1 }}"
+    body_on: '1'
+    body_off: '0'
+    headers:
+      Content-Type: application/json
+    scan_interval: 10
+
+# Output pin1
+  - platform: rest
+    name: pifacedigital_output_1
+    unique_id: pifacedigital_output_1
+    resource: http://<HOST>:8080/api/output/1
+    is_on_template: "{{ value |int == 1 }}"
+    body_on: '1'
+    body_off: '0'
+    headers:
+      Content-Type: application/json
+    scan_interval: 10
+```
+
+## References
+ - [PiFace Digital I/O's documentation](https://pifacedigitalio.readthedocs.io/)  
+ - [Flask documentation](https://flask.palletsprojects.com/)  
+ - [Flask-RESTful documentation](https://flask-restful.readthedocs.io/)  
+ - [Home Assistant](https://www.home-assistant.io)  
