@@ -29,10 +29,18 @@ sudo make systemd-remove
 ```
 
 ## Configuration
-The default port for accessing the API is TCP/8080.
-The port can be changed in the systemd service file located  
-at `/etc/systemd/system/pifacedigital-web-api.service` 
+The default port for accessing the API is TCP/8080.  
 
+An optional `config.cfg` file can be placed at `/etc/pifacedigital-web-api`  
+to override the default settings. The network address and port that the  
+service will listen on can be changed.  
+The following example will list on all host addresses on port 8081.
+```
+# /etc/pifacedigital-web-api/config.cfg
+
+LISTEN="0.0.0.0"
+PORT=8081
+```
 
 ## API Documentation
 A RESTful API is provided for interacting with IO-pins of the PiFaceDigital.  

@@ -1,6 +1,6 @@
 [project]
 name = "pifacedigital-web-api"
-version = "0.3.0"
+version = "0.4.0"
 authors = [
   { name="Erik Petersen", email="eht@it-trans.dk" },
 ]
@@ -32,6 +32,7 @@ include = [
     "Makefile",
      "requirements-dev.txt",
     "requirements.txt",
+    "etc/",
     "tests/",
 ]
 

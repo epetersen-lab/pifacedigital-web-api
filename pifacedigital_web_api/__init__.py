@@ -8,7 +8,12 @@ pifacedigital = pifacedigitalio.PiFaceDigital()
 
 def create_app():
 
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
+    try:
+        app.config.from_pyfile('/etc/pifacedigital-web-api/config.cfg')
+    except FileNotFoundError:
+        app.config["LISTEN"] = "0.0.0.0"
+        app.config["PORT"] = 8080
     api = Api(app)
     api.add_resource(PiFaceOutputs, "/api/outputs", methods=["GET"])
     api.add_resource(PiFaceOutput, "/api/output/<int:output_pin>", methods=["GET", "POST"])
@@ -60,7 +65,7 @@ class PiFaceInputs(Resource):
 
 def main():
     app = create_app()
-    serve(app, host="0.0.0.0", port=8080)
+    serve(app, host=app.config["LISTEN"], port=app.config["PORT"])
 
 
 if __name__ == '__main__':
