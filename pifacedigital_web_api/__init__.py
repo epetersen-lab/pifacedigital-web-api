@@ -1,6 +1,7 @@
 import pifacedigitalio
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
+from waitress import serve
 
 pifacedigital = pifacedigitalio.PiFaceDigital()
 
@@ -57,6 +58,10 @@ class PiFaceInputs(Resource):
         return jsonify(input_pins)
 
 
-if __name__ == '__main__':
+def main():
     app = create_app()
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    serve(app, host="0.0.0.0", port=8080)
+
+
+if __name__ == '__main__':
+    main()

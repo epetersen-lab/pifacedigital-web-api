@@ -1,6 +1,6 @@
 [project]
 name = "pifacedigital-web-api"
-version = "0.2.0"
+version = "0.3.0"
 authors = [
   { name="Erik Petersen", email="eht@it-trans.dk" },
 ]
@@ -17,6 +17,7 @@ dependencies = [
     "flask-restful",
     "pifacecommon",
     "pifacedigitalio",
+    "waitress"
 ]
 
 [build-system]
@@ -37,3 +38,5 @@ include = [
 [tool.flit.external-data]
 directory = "systemd"
 
+[project.scripts]
+pifacedigital-web-api = "pifacedigital_web_api.__init__:main"

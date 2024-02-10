@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=pi
-ExecStart=waitress-serve --port=8080 --call "pifacedigital_web_api:create_app"
+ExecStart=pifacedigital-web-api
 Restart=always
 
 [Install]
